@@ -1,2 +1,6 @@
 google.com
 youtube.com
+github.com
+cloudflare.com
+invalid-domain-test12345.com
+www.5starvoting.com
