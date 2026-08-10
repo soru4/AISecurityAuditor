@@ -29,8 +29,30 @@ public class SecurityAudit implements Callable<Integer>{
     @Option(names = {"--ai"}, description = "Enable AI analysis for security recommendations")
     private boolean enableAIAnalysis = false;
 
-    @Option(names = {"--ai-api-key", "--api-key"}, description = "API key for AI analysis (required if --ai is enabled)")
+    
+
+    @Option(names = {"--p", "--provider"}, description = "Provider for AI analysis (required if --ai is enabled) you can choose from 'opennai' or 'gemini' or 'ollama'")
+    private String aiProvider;
+
+    @Option(
+    names = {"--model-name"},
+    description = "Model name to use (e.g., 'llama3', 'gpt-4o-mini', 'gemini-2.5-flash')"
+    )
+    private String modelName;
+
+    @Option(
+    names = {"--ollama-url"},
+    description = "Ollama endpoint URL (default: ${DEFAULT-VALUE})")
+    private String ollamaUrl;
+
+    @Option(names = {"--ai-api-key", "--api-key"}, description = "API key for AI analysis (required if --ai is enabled) not needed for ollama provider")
     private String aiApiKey;
+
+    @Option(
+    names = {"-o", "--output"},
+    description = "Output CSV file path (e.g., report.csv) this is only used if --ai is enabled and will save the AI report to the specified file"
+)
+    private File outputFile;
 
     @Override
     public Integer call() throws Exception {
@@ -68,7 +90,7 @@ public class SecurityAudit implements Callable<Integer>{
                 results.add(result);
                 System.out.println(result.toString() );
             };
-            Task task = new Task("Task - " + i, "SSL_AUDIT", work);
+            Task task = new Task( url + "- Task - " + i, "SSL_AUDIT", work);
 
             pool.executeTask(task);
         }
@@ -80,6 +102,21 @@ public class SecurityAudit implements Callable<Integer>{
 
         pool.shutdown();
         System.out.println("\n\n=== Scan Complete! Total Scanned: " + results.size() + " ===");
+
+
+        if(enableAIAnalysis){
+            System.out.println("\n\n=== Starting AI Analysis ===");
+            AIReportService aiService = new AIReportService(aiProvider, modelName, aiApiKey, ollamaUrl);
+            System.out.println("\n\n=== Initializing AI Service ===");
+            String aiReport = aiService.generateReport(results);
+            System.out.println("\n\n=== AI Analysis Complete! ===");
+           
+
+            if(outputFile != null){
+                Files.writeString(outputFile.toPath(), aiReport);
+                System.out.println("\n\nAI Report saved to: " + outputFile.getAbsolutePath());
+            }
+        }
         return 0;
     }
 
