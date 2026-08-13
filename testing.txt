@@ -1,8 +1,2 @@
 google.com
-youtube.com
-github.com
-cloudflare.com
-openai.com
-vercel.com
-wikipedia.org
-badssl.com
+www.5starvoting.com

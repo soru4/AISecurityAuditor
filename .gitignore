@@ -1,5 +1,5 @@
-.class
-.jar
-.txt
-.csv
-.json
+*.class
+*.jar
+*.txt
+*.csv
+*.json

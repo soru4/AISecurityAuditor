@@ -24,7 +24,7 @@ public class SecurityAudit implements Callable<Integer> {
 
     @Option(names = { "-t",
             "-threads" }, description = "Number of threads to use for auditing (default: $d{numThreads})")
-    private int numThreads = 5;
+    private static int numThreads = 5;
 
     @Option(names = { "-f",
             "-file" }, description = "The path to the file with a list of URLs to look over")
@@ -69,6 +69,9 @@ public class SecurityAudit implements Callable<Integer> {
 
     public static List<ScanResult> results = Collections.synchronizedList(new ArrayList<>());
     public static Set<String> scannedDomains = Collections.synchronizedSet(new HashSet<>());
+    public static ThreadSafeTaskQueue queue = new ThreadSafeTaskQueue();
+    public static ThreadPool pool = new ThreadPool(numThreads, queue);
+    public static List<Task> tasks = Collections.synchronizedList(new ArrayList<>());
 
     @Override
     public Integer call() throws Exception {
@@ -126,12 +129,12 @@ public class SecurityAudit implements Callable<Integer> {
             System.out.println("\n\nTurning on the Thread Pool with " + numThreads + " threads...");
 
         List<Task> tasks = Collections.synchronizedList(new ArrayList<>());
-        ThreadSafeTaskQueue queue = new ThreadSafeTaskQueue();
-        ThreadPool pool = new ThreadPool(numThreads, queue);
+
         if (debugMode)
             System.out.println("Thread Pool initialized successfully.");
         if (debugMode)
             System.out.println("Initializing scanning tasks for each URL in the file...");
+
         for (int i = 0; i < urls.size(); i++) {
             String url = urls.get(i).trim();
             if (url.isEmpty())
@@ -155,18 +158,28 @@ public class SecurityAudit implements Callable<Integer> {
                 System.out.println("Task for URL: " + url + " added to the queue.");
 
         }
-        while (!queue.getTaskQueue().isEmpty()) {
+        Thread.sleep(recursive ? 10000 : 2000);
+        boolean allTasksCompleted = false;
+        while (!allTasksCompleted) {
+            int numCompleted = 0;
             for (Task task : tasks) {
-                if (!task.isCompleted()) {
-                    Thread.sleep(2000);
+                if (task.isCompleted()) {
+                    numCompleted++;
+                } else {
+                    Thread.sleep(1000);
                 }
+
             }
+            if (debugMode)
+                System.out.println("Num of tasks completed - " + numCompleted + " / " + tasks.size());
+
+            allTasksCompleted = numCompleted == tasks.size();
 
         }
-        Thread.sleep(7000);
+        if (allTasksCompleted)
+            Thread.sleep(7000);
         if (debugMode)
             System.out.println("\n\nAll tasks completed. Shutting down the Thread Pool...");
-        
 
         pool.shutdown();
         System.out.println("\n\n=== Scan Complete! Total Scanned: " + results.size() + " ===");
@@ -175,7 +188,7 @@ public class SecurityAudit implements Callable<Integer> {
             if (debugMode) {
                 System.out.println("[Notice] Thread interrupt flag detected. Clearing it before proceeding.");
             }
-           
+
         }
 
         if (enableAIAnalysis) {
@@ -187,14 +200,14 @@ public class SecurityAudit implements Callable<Integer> {
                 System.out.println("[AI] AI Service initialized with provider: " + aiProvider + ", model: " + modelName
                         + ", ollamaUrl: " + ollamaUrl);
             }
-            
+
             String aiReport = aiService.generateReport(results);
-            if(debugMode || outputFile == null) {
+            if (debugMode || outputFile == null) {
                 System.out.println("\n\n=== AI Report ===");
                 System.out.println(aiReport);
                 System.out.println("\n\n");
             }
-            
+
             System.out.println("\n\n=== AI Analysis Complete! ===");
 
             if (outputFile != null) {
