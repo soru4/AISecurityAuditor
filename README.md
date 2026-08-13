@@ -2,11 +2,11 @@
 A high performance Java-based CLI tool that automates network security audits. It does HTTP security header evaluation as well as TLS and SSL certificate inspection. It can also recursively check these things for embedded links in the given domain. It will distribute all of the tasks on multiple threads to allow for many, many domains to be scanned concurrently. The project allows the user to choose an AI provider between Gemini, OpenAI, and Ollama for JSON summaries. 
 
 ## Table of Contents
-  1. [Features](#-features)
-  2. [Getting Started](#-getting-started)
-  3. [Required Dependencies](#-required-dependencies)
-  4. [Usage](#-usage)
-  5. [Detailed Manual](#-detailed-menu)
+  1. [Features](#features)
+  2. [Getting Started](#getting-started)
+  3. [Required Dependencies](#required-dependencies)
+  4. [Usage](#usage)
+  5. [Detailed Manual](#detailed-menu)
 
 ## Features
   - **Intuitive CLI Interface (picocli):** Powered by picocli for elegant command-line argument parsing, subcommands, and built-in --help menus
