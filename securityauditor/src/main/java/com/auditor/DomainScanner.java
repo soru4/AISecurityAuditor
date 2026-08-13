@@ -126,7 +126,9 @@ public class DomainScanner {
                                     }
                                 };
                                 Task task = new Task(linkHref + "- Task - ", "SSL_AUDIT", work);
+                                
                                 SecurityAudit.tasks.add(task);
+                                System.out.println("adding task " + SecurityAudit.tasks.size() );
                                 SecurityAudit.pool.executeTask(task);
 
                             }

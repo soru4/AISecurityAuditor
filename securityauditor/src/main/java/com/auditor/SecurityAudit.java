@@ -158,16 +158,19 @@ public class SecurityAudit implements Callable<Integer> {
                 System.out.println("Task for URL: " + url + " added to the queue.");
 
         }
-        Thread.sleep(recursive ? 10000 : 2000);
+ 
         boolean allTasksCompleted = false;
         while (!allTasksCompleted) {
+            
             int numCompleted = 0;
+            System.out.println(numCompleted + "/" + tasks.size());
             for (Task task : tasks) {
                 if (task.isCompleted()) {
                     numCompleted++;
                 } else {
                     Thread.sleep(1000);
                 }
+                System.out.println(numCompleted + "/" + tasks.size());
 
             }
             if (debugMode)
@@ -176,12 +179,13 @@ public class SecurityAudit implements Callable<Integer> {
             allTasksCompleted = numCompleted == tasks.size();
 
         }
-        if (allTasksCompleted)
+        if (allTasksCompleted) {
             Thread.sleep(7000);
-        if (debugMode)
-            System.out.println("\n\nAll tasks completed. Shutting down the Thread Pool...");
+            if (debugMode)
+                System.out.println("\n\nAll tasks completed. Shutting down the Thread Pool...");
 
-        pool.shutdown();
+            pool.shutdown();
+        }
         System.out.println("\n\n=== Scan Complete! Total Scanned: " + results.size() + " ===");
 
         if (Thread.interrupted()) {
