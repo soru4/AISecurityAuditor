@@ -61,7 +61,7 @@ public class SecurityAudit implements Callable<Integer> {
     private String aiApiKey;
 
     @Option(names = { "-o",
-            "--output" }, description = "Output CSV file path (e.g., report.csv) this is only used if --ai is enabled and will save the AI report to the specified file")
+            "--output" }, description = "Output CSV file path (e.g., report.json) this is only used if --ai is enabled and will save the AI report to the specified file")
     private File outputFile;
 
     @Option(names = { "-debug", "--debug" }, description = "Enable debug mode for detailed logging")
@@ -85,12 +85,15 @@ public class SecurityAudit implements Callable<Integer> {
                     System.out.println("Debug Mode: Scanning single domain: " + domain + " with recursive: " + recursive
                             + " and recursive steps: " + recursiveSteps + "\n\n");
                 }
-
+                Runnable w = () ->{
                 ScanResult result = DomainScanner.scanDomain(domain, recursive, 0, recursiveSteps);
                 if (result != null) {
                     results.add(result);
                     System.out.println(result.toString() + "\n\n");
                 }
+            };
+                Task t = new Task("Domain1", "SSL SCAN", w);
+                pool.executeTask(t);
                 Thread.sleep(7000);
                 if (enableAIAnalysis) {
 
@@ -109,6 +112,7 @@ public class SecurityAudit implements Callable<Integer> {
                         System.out.println("\n\nAI Report saved to: " + outputFile.getAbsolutePath());
                     }
                 }
+                pool.shutdown();
                 return 0;
 
             } else {
