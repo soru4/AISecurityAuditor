@@ -2,5 +2,7 @@ google.com
 youtube.com
 github.com
 cloudflare.com
-invalid-domain-test12345.com
-www.5starvoting.com
+openai.com
+vercel.com
+wikipedia.org
+badssl.com
