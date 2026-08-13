@@ -1,5 +1,5 @@
 # AI Security Auditor CLI tool
-A high performance Java-based CLI tool that automates network security audits. It does HTTP security header evaluation as well as TLS and SSL certificate inspection. It can also recursively check these things for embedded links in the given domain. It will distribute all of the tasks on multiple threads to allow for many, many domains to be scanned concurrently. The project allows the user to choose an AI provider between Gemini, OpenAI, and Ollama for JSON summaries. 
+A high performance Java-based CLI tool that automates network security audits. It does HTTP security header evaluation as well as TLS and SSL certificate inspection. It can also recursively check these for embedded links in the given domain. It will distribute all of the tasks on multiple threads to allow for many domains to be scanned concurrently. The project allows the user to choose an AI provider between Gemini, OpenAI, and Ollama for JSON summaries. 
 
 ## Table of Contents
   1. [Features](#features)
@@ -26,8 +26,7 @@ A high performance Java-based CLI tool that automates network security audits. I
   1. PicoCLI
   2. JSoup
   3. LangChain4
-  4. [TaskDistributor](https://github.com/soru4/TaskDistrib)
-
+  4. [Task Distributor](https://github.com/soru4/TaskDistrib/releases/tag/Release)
 ## Usage
   ### Basic Use:
    To scan a single domain:
@@ -154,6 +153,11 @@ A high performance Java-based CLI tool that automates network security audits. I
   ### Set output JSON file
   ```
     java -jar auditor.jar -t 3 -d (domain to scan) --ai --provider (Choose provider) --model-name (choose ai model name ex. gemini-3.6-flash) --api-key (YOUR API KEY) -o (Output File)
+  ```
+  ### Set output txt file
+  if you would like a simple output text file without the AI processing use the following command structure
+  ```
+    java -jar auditor.jar -t 3 -d (domain to scan) -o (path to file)
   ```
 
   ### Turn on Debug mode
