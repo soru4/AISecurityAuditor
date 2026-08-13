@@ -6,7 +6,7 @@ A high performance Java-based CLI tool that automates network security audits. I
   2. [Getting Started](#getting-started)
   3. [Required Dependencies](#required-dependencies)
   4. [Usage](#usage)
-  5. [Detailed Manual](#detailed-menu)
+  5. [Detailed Manual](#detailed-manual)
 
 ## Features
   - **Intuitive CLI Interface (picocli):** Powered by picocli for elegant command-line argument parsing, subcommands, and built-in --help menus
