@@ -14,7 +14,7 @@ A high performance Java-based CLI tool that automates network security audits. I
   - **SSL/TLS Expiry Tracking:** Inspects target certificates and calculates remaining validity days.
   - **HTTP Security Header Audit:** Scans for missing security headers like _Strict-Transport-Security_, _Content-Security-Policy_, _X-Frame-Options_, and more.
   - **Recursive Link Crawling:** Parses HTML with JSoup to recursively discover and scan internal/external links up to a configured step depth.
-  - **Multi-Provider AI Analysis:** Integrates via _LangChain4j_ / REST endpoints with OpenAI (GPT-4o), Google Gemini, and local Ollama models.
+  - **Multi-Provider AI Analysis:** Integrates via _LangChain4j_ / REST endpoints with OpenAI, Google Gemini, and local Ollama models.
   - **Duplicate Prevention:** Tracks scanned hosts across recursive passes to prevent infinite crawling loops.
 
 ## Getting Started
