@@ -73,6 +73,11 @@ public class SecurityAudit implements Callable<Integer> {
     public static ThreadPool pool = new ThreadPool(numThreads, queue);
     public static List<Task> tasks = Collections.synchronizedList(new ArrayList<>());
 
+    /** 
+     * Runs the CLI output. 
+     * @return Integer
+     * @throws Exception
+     */
     @Override
     public Integer call() throws Exception {
         System.out.println("=== Starting Security Audit ===");
@@ -226,6 +231,9 @@ public class SecurityAudit implements Callable<Integer> {
         return 0;
     }
 
+    /** 
+     * @param args
+     */
     public static void main(String[] args) {
         System.setProperty("sun.net.client.defaultConnectTimeout", "120000");
         System.setProperty("sun.net.client.defaultReadTimeout", "120000");

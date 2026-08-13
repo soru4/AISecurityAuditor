@@ -8,7 +8,14 @@ public class ScanResult {
     private final boolean isReachable;
     private final boolean wasScannedInRecursiveMode;
   
-
+    /**
+     * Sets up scan result. Just stores all of the information needed. 
+     * @param url
+     * @param dayTillSSLExpiry
+     * @param missingHeaders
+     * @param isReachable
+     * @param wasScannedInRecursiveMode
+     */
     public ScanResult(String url, long dayTillSSLExpiry, Map<String, String> missingHeaders, boolean isReachable, boolean wasScannedInRecursiveMode) {
         this.url = url;
         this.dayTillSSLExpiry = dayTillSSLExpiry;
@@ -24,26 +31,50 @@ public class ScanResult {
 
     
 
+    /** 
+     * Gets the URL scanned. 
+     * @return String
+     */
     public String getUrl() {
         return url;
     }
 
+    /** 
+     * gets the number of days until the SSL for the domain expires. 
+     * @return long
+     */
     public long getDayTillSSLExpiry() {
         return dayTillSSLExpiry;
     }
 
+    /** 
+     * Returns the http headers that are missing for the domain
+     * @return Map<String, String>
+     */
     public Map<String, String> getMissingHeaders() {
         return missingHeaders;
     }
 
+    /** 
+     * Returns if the DomainScanner was able to access the url. 
+     * @return boolean
+     */
     public boolean isReachable() {
         return isReachable;
     }
+    /** 
+     * Returns if the domain was conducting a recursive step when scanning. 
+     * @return boolean
+     */
     public boolean wasScannedInRecursiveMode() {
         return wasScannedInRecursiveMode;
     }
 
 
+    /** 
+     * Converts the Scan result to a string. 
+     * @return String
+     */
     @Override
     public String toString(){
         if(!isReachable && wasScannedInRecursiveMode){

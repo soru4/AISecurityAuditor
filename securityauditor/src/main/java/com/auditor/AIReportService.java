@@ -7,11 +7,21 @@ import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.ollama.OllamaChatModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import java.time.Duration;
-
+/**
+ * 
+ * AIReportService
+ * AI report service sends all of our scan findings to an external AI model. 
+ */
 public class AIReportService {
 
     private final ChatLanguageModel model;
-
+    /**
+     * Sets up the AI model and provider based on user selection. 
+     * @param provider
+     * @param modelName
+     * @param apiKey
+     * @param ollamaUrl
+     */
     public AIReportService(String provider, String modelName, String apiKey, String ollamaUrl) {
         if (ollamaUrl == null || ollamaUrl.isEmpty()) {
             ollamaUrl = "http://localhost:11434";
@@ -60,12 +70,22 @@ public class AIReportService {
         }
     }
 
+    /** 
+     * Checks the API key and makes sure its valid. Does not check if it is a working API key, just makes sure it exists. 
+     * @param apiKey
+     * @param providerName
+     */
     private void validateApiKey(String apiKey, String providerName) {
         if (apiKey == null || apiKey.isEmpty()) {
             throw new IllegalArgumentException("API key is required for " + providerName + " provider.");
         }
     }
 
+    /** 
+     * It creates the prompt and sends the scan findings to the AI model and gets  response.
+     * @param scanResultsSummary
+     * @return String
+     */
     public String generateReport(List<ScanResult> scanResultsSummary) {
         StringBuilder prompt = new StringBuilder();
         prompt.append("You are a Senior DevSecOps Engineer. Analyze these raw network scan findings:\n\n");

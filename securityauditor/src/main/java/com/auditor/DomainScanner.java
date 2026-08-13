@@ -24,6 +24,14 @@ public class DomainScanner {
             "Referrer-Policy",
             "Permissions-Policy");
 
+    /** 
+     * Scans the domain given with respect to the settings. 
+     * @param domain
+     * @param recursive
+     * @param step
+     * @param maxSteps
+     * @return ScanResult
+     */
     public static ScanResult scanDomain(String domain, boolean recursive, int step, int maxSteps) {
         if (step > maxSteps) {
             return new ScanResult(domain, -1, Collections.emptyMap(), false, true);
