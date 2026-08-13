@@ -33,7 +33,7 @@ public class AIReportService {
                 model = OpenAiChatModel.builder()
                         .apiKey(apiKey)
                         .modelName(selectedModel)
-                        .temperature(0.0)
+                        .temperature(0.1)
                         .maxTokens(8192*4)
                         .timeout(Duration.ofSeconds(240))
                         .build();
@@ -46,7 +46,7 @@ public class AIReportService {
                         .baseUrl("https://generativelanguage.googleapis.com/v1beta/openai/")
                         .apiKey(apiKey)
                         .modelName(selectedModel)
-                        .temperature(0.0)
+                        .temperature(0.1)
                         .maxTokens(8192*4)
                         .timeout(Duration.ofSeconds(120))
                         .build();
@@ -59,7 +59,7 @@ public class AIReportService {
                 model = OllamaChatModel.builder()
                         .baseUrl(ollamaUrl)
                         .modelName(selectedModel)
-                        .temperature(0.0)
+                        .temperature(0.1)
                         .numPredict(8192*4)
                         .timeout(Duration.ofSeconds(240))
                         .build();

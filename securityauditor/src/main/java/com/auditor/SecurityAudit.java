@@ -61,7 +61,7 @@ public class SecurityAudit implements Callable<Integer> {
     private String aiApiKey;
 
     @Option(names = { "-o",
-            "--output" }, description = "Output CSV file path (e.g., report.json) this is only used if --ai is enabled and will save the AI report to the specified file")
+            "--output" }, description = "Output JSON or TXT file path (e.g., report.json or report.txt) will be json if --ai is enabled. will be txt if not. ")
     private File outputFile;
 
     @Option(names = { "-debug", "--debug" }, description = "Enable debug mode for detailed logging")
@@ -73,8 +73,9 @@ public class SecurityAudit implements Callable<Integer> {
     public static ThreadPool pool = new ThreadPool(numThreads, queue);
     public static List<Task> tasks = Collections.synchronizedList(new ArrayList<>());
 
-    /** 
-     * Runs the CLI output. 
+    /**
+     * Runs the CLI output.
+     * 
      * @return Integer
      * @throws Exception
      */
@@ -90,13 +91,13 @@ public class SecurityAudit implements Callable<Integer> {
                     System.out.println("Debug Mode: Scanning single domain: " + domain + " with recursive: " + recursive
                             + " and recursive steps: " + recursiveSteps + "\n\n");
                 }
-                Runnable w = () ->{
-                ScanResult result = DomainScanner.scanDomain(domain, recursive, 0, recursiveSteps);
-                if (result != null) {
-                    results.add(result);
-                    System.out.println(result.toString() + "\n\n");
-                }
-            };
+                Runnable w = () -> {
+                    ScanResult result = DomainScanner.scanDomain(domain, recursive, 0, recursiveSteps);
+                    if (result != null) {
+                        results.add(result);
+                        System.out.println(result.toString() + "\n\n");
+                    }
+                };
                 Task t = new Task("Domain1", "SSL SCAN", w);
                 pool.executeTask(t);
                 Thread.sleep(7000);
@@ -116,6 +117,14 @@ public class SecurityAudit implements Callable<Integer> {
                         Files.writeString(outputFile.toPath(), aiReport);
                         System.out.println("\n\nAI Report saved to: " + outputFile.getAbsolutePath());
                     }
+                }
+                if (!enableAIAnalysis && outputFile != null) {
+                    String allResults = "";
+                    for (ScanResult scan : results) {
+                        allResults += scan.toString() + "\n";
+                    }
+                    Files.writeString(outputFile.toPath(), allResults);
+                    System.out.println("\n\nReport saved to: " + outputFile.getAbsolutePath());
                 }
                 pool.shutdown();
                 return 0;
@@ -167,10 +176,10 @@ public class SecurityAudit implements Callable<Integer> {
                 System.out.println("Task for URL: " + url + " added to the queue.");
 
         }
- 
+
         boolean allTasksCompleted = false;
         while (!allTasksCompleted) {
-            
+
             int numCompleted = 0;
             System.out.println(numCompleted + "/" + tasks.size());
             for (Task task : tasks) {
@@ -228,10 +237,19 @@ public class SecurityAudit implements Callable<Integer> {
                 System.out.println("\n\nAI Report saved to: " + outputFile.getAbsolutePath());
             }
         }
+
+        if (!enableAIAnalysis && outputFile != null) {
+            String allResults = "";
+            for (ScanResult scan : results) {
+                allResults += scan.toString() + "\n";
+            }
+            Files.writeString(outputFile.toPath(), allResults);
+            System.out.println("\n\nReport saved to: " + outputFile.getAbsolutePath());
+        }
         return 0;
     }
 
-    /** 
+    /**
      * @param args
      */
     public static void main(String[] args) {
