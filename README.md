@@ -101,6 +101,8 @@ A high performance Java-based CLI tool that automates network security audits. I
   ```
 
 ## Detailed Manual
+  Do not include any of the content within and including the parentheses for all example commands. 
+  Ex. `java -jar auditor.jar --api-key (fill in your api key)` could be rewritten as `java -jar auditor.jar --api-key 1234567890`
 
   ### Scan one domain at a time
   Use the command:
@@ -155,7 +157,7 @@ A high performance Java-based CLI tool that automates network security audits. I
     java -jar auditor.jar -t 3 -d (domain to scan) --ai --provider (Choose provider) --model-name (choose ai model name ex. gemini-3.6-flash) --api-key (YOUR API KEY) -o (Output File)
   ```
   ### Set output txt file
-  if you would like a simple output text file without the AI processing use the following command structure
+  if you would like a simple output text file without the AI processing use the following command structure. When output is enabled without AI being enabled, the program defaults to a txt file output. 
   ```
     java -jar auditor.jar -t 3 -d (domain to scan) -o (path to file)
   ```
